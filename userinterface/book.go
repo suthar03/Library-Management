@@ -24,13 +24,14 @@ func DisplayAvailableBooks(library *models.Library) {
 		fmt.Println("The library is empty.")
 		return
 	}
-	printBookTable(library.Books)
+	printBooksAllDetails(library.Books)
 }
 
 // BorrowBook allows the user to borrow a book from the library.
 func BorrowBook(library *models.Library) {
 	title := GetBookTitle()
 	msg := library.BorrowBook(title)
+	fmt.Println()
 	fmt.Println(msg)
 }
 
@@ -38,6 +39,7 @@ func BorrowBook(library *models.Library) {
 func ReturnBook(library *models.Library) {
 	title := GetBookTitle()
 	msg := library.ReturnBook(title)
+	fmt.Println()
 	fmt.Println(msg)
 }
 
@@ -67,7 +69,7 @@ func DisplayBorrowedBooks(library *models.Library) {
 		fmt.Println("No books borrowed")
 	} else {
 		fmt.Println("Here is the list of books you borrowed:")
-		printBookTable(books)
+		printBooksTitleAndAuthor(books)
 	}
 }
 
@@ -77,10 +79,10 @@ func SearchBookByTitle(library *models.Library) {
 	books := library.SearchBookByTitle(title)
 	fmt.Println()
 	if len(books) == 0 {
-		fmt.Println("No books available with the provided title")
+		fmt.Printf("No books available with the title: %s\n", title)
 	} else {
 		fmt.Println("Here is the best match to your search:")
-		printBookTable(books)
+		printBooksAllDetails(books)
 	}
 }
 
@@ -90,18 +92,18 @@ func SearchBookByAuthor(library *models.Library) {
 	books := library.SearchBookByAuthor(author)
 	fmt.Println()
 	if len(books) == 0 {
-		fmt.Println("No books available by the provided author")
+		fmt.Printf("No books available of the author: %s\n", author)
 	} else {
 		fmt.Println("Here is the best match to your search:")
-		printBookTable(books)
+		printBooksAllDetails(books)
 	}
 }
 
 // printBookTable prints the list of books in a table format.
-func printBookTable(books []*models.Book) {
+func printBooksAllDetails(books []*models.Book) {
 	// Calculate maximum lengths for columns
-	maxTitleLength := 50  // Minimum width for title column
-	maxAuthorLength := 50 // Minimum width for author column
+	maxTitleLength := 10  // Minimum width for title column
+	maxAuthorLength := 10 // Minimum width for author column
 	for _, book := range books {
 		if len(book.Title) > maxTitleLength {
 			maxTitleLength = len(book.Title)
@@ -121,5 +123,31 @@ func printBookTable(books []*models.Book) {
 		fmt.Printf("%-*s  |  %-*s  |  %d\n", maxTitleLength, book.Title, maxAuthorLength, book.Author, available)
 	}
 	fmt.Println(strings.Repeat("-", maxTitleLength+maxAuthorLength+20)) // Line separator
+
+}
+
+// printBookTable prints the list of books in a table format.
+func printBooksTitleAndAuthor(books []*models.Book) {
+	// Calculate maximum lengths for columns
+	maxTitleLength := 10  // Minimum width for title column
+	maxAuthorLength := 10 // Minimum width for author column
+	for _, book := range books {
+		if len(book.Title) > maxTitleLength {
+			maxTitleLength = len(book.Title)
+		}
+		if len(book.Author) > maxAuthorLength {
+			maxAuthorLength = len(book.Author)
+		}
+	}
+
+	fmt.Println(strings.Repeat("-", maxTitleLength+maxAuthorLength)) // Line separator
+	fmt.Printf("%-*s  |  %-*s\n", maxTitleLength, "Title", maxAuthorLength, "Author")
+	fmt.Println(strings.Repeat("-", maxTitleLength+maxAuthorLength)) // Line separator
+
+	// Print books
+	for _, book := range books {
+		fmt.Printf("%-*s  |  %-*s \n", maxTitleLength, book.Title, maxAuthorLength, book.Author)
+	}
+	fmt.Println(strings.Repeat("-", maxTitleLength+maxAuthorLength)) // Line separator
 
 }

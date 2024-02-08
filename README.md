@@ -29,18 +29,12 @@ This is a console-based application for managing a library of books. It allows u
     cd Library-Management
     ```
 
-3. Build the executable:
-
-    ```bash
-    go build -o library
-    ```
-
 ## Usage
 
-1. Run the executable:
+1. Run the code:
 
     ```bash
-    ./library
+    go run main.go
     ```
 
 2. Follow the prompts to perform various operations such as adding, borrowing, returning, or searching for books.

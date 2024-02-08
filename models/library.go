@@ -47,7 +47,7 @@ func (library *Library) ReturnBook(title string) string {
 			}
 		}
 	}
-	return "This book is not available in the library, please check the title"
+	return "This book doesn't belong to this library, please check the title"
 }
 
 func (library *Library) SearchBookByAuthor(author string) []*Book {
