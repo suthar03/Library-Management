@@ -26,7 +26,7 @@ This is a console-based application for managing a library of books. It allows u
 2. Navigate to the project directory:
 
     ```bash
-    cd PineLabs
+    cd Library-Management
     ```
 
 3. Build the executable:
