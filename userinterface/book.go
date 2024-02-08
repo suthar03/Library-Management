@@ -21,7 +21,7 @@ func AddBook(library *models.Library) {
 // DisplayAvailableBooks prints the list of available books in the library.
 func DisplayAvailableBooks(library *models.Library) {
 	if len(library.Books) == 0 {
-		fmt.Println("The library is empty.")
+		fmt.Println("\nThe library is empty.")
 		return
 	}
 	printBooksAllDetails(library.Books)
