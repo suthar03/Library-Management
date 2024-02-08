@@ -9,7 +9,6 @@ import (
 
 func main() {
 	library := models.NewLibrary() // Initialize library
-	// defer library.Close()   // Close resources on program exit
 
 	for {
 		userinterface.DisplayMenu()
