@@ -16,7 +16,6 @@ func AddBook(library *models.Library) {
 	book := models.NewBook(title, author, quantity, 0)
 	msg := library.AddBook(&book)
 	fmt.Println(msg)
-	return
 }
 
 // DisplayAvailableBooks prints the list of available books in the library.
@@ -89,6 +88,7 @@ func SearchBookByTitle(library *models.Library) {
 func SearchBookByAuthor(library *models.Library) {
 	author := GetBookAuthor()
 	books := library.SearchBookByAuthor(author)
+	fmt.Println()
 	if len(books) == 0 {
 		fmt.Println("No books available by the provided author")
 	} else {
