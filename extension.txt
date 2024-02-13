@@ -1,0 +1,6 @@
+Section 1: Introduction and Multiple Stores (Part 1/2) 
+The user of this application is the Librarian. 
+Extension Introduction: In this extension to the original problem statement, we are enhancing the Library Book Management System to handle new challenges and requirements. The library now operates from multiple physical store locations, each with its independent book inventory, allowing customers to purchase books in person from any store. 
+Part 1/2: Multiple Stores 
+Stores: The library has expanded to include multiple stores, each with its own unique inventory of books. This means that customers can visit any store of their choice to browse, purchase, and borrow books. Each store operates independently but is part of a unified library system. 
+In case the book a customer desires to read is not with the library, the librarian should be able to see stock of the book across other libraries to advise customers about which store to goto. 
