@@ -1,15 +1,71 @@
 package models
 
 import (
+	"bufio"
+	"fmt"
+	"os"
 	"strings"
 )
 
 type Library struct {
+	ID    string
 	Books []*Book
 }
 
-func NewLibrary() *Library {
-	return &Library{}
+func NewLibrary(id string) *Library {
+	return &Library{ID: id}
+}
+
+type BookStore struct {
+	Libraries []*Library
+}
+
+func NewBookStore() *BookStore {
+	return &BookStore{}
+}
+
+func (store *BookStore) AddLibrary(library *Library) string {
+	if library == nil {
+		return "invalid library object"
+	}
+	store.Libraries = append(store.Libraries, library)
+	return "library added successfully"
+}
+
+func (store *BookStore) GetLibrary(id string) *Library {
+	for _, lib := range store.Libraries {
+		if strings.EqualFold(lib.ID, id) {
+			return lib
+		}
+	}
+	return nil
+}
+
+func (store *BookStore) GetLibraryID() string {
+	var libraryID string
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Print("Enter library id: ")
+	if scanner.Scan() {
+		libraryID = scanner.Text()
+	}
+	if err := store.ValidateLibraryID(libraryID); err != nil {
+		fmt.Println(err.Error(), ", please try again...")
+		libraryID = store.GetLibraryID()
+	}
+	return libraryID
+}
+
+func (store *BookStore) ValidateLibraryID(id string) error {
+	id = strings.TrimSpace(id) // Remove leading and trailing whitespace
+	if id == "" {
+		return fmt.Errorf("library id cannot be empty")
+	}
+	for _, lib := range store.Libraries {
+		if strings.EqualFold(lib.ID, id) {
+			return nil
+		}
+	}
+	return fmt.Errorf("invalid library id")
 }
 
 func (library *Library) AddBook(newBook *Book) string {

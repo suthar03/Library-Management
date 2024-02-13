@@ -8,7 +8,12 @@ import (
 )
 
 func main() {
-	library := models.NewLibrary() // Initialize library
+	bookStore := models.NewBookStore()
+
+	library1 := models.NewLibrary("1") // Initialize library
+	library2 := models.NewLibrary("2") // Initialize library
+	bookStore.AddLibrary(library1)
+	bookStore.AddLibrary(library2)
 
 	for {
 		userinterface.DisplayMenu()
@@ -16,17 +21,17 @@ func main() {
 
 		switch choice {
 		case constants.AddBookOption:
-			userinterface.AddBook(library)
+			userinterface.AddBook(bookStore)
 		case constants.AvailableBooksOption:
-			userinterface.DisplayAvailableBooks(library)
+			userinterface.DisplayAvailableBooks(bookStore)
 		case constants.BorrowBookOption:
-			userinterface.BorrowBook(library)
+			userinterface.BorrowBook(bookStore)
 		case constants.ReturnBookOption:
-			userinterface.ReturnBook(library)
+			userinterface.ReturnBook(bookStore)
 		case constants.SearchBookOption:
-			userinterface.SearchBook(library)
+			userinterface.SearchBook(bookStore)
 		case constants.BorrowedBookOption:
-			userinterface.DisplayBorrowedBooks(library)
+			userinterface.DisplayBorrowedBooks(bookStore)
 		case constants.QuitOption:
 			return
 		default:

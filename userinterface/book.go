@@ -8,52 +8,56 @@ import (
 )
 
 // AddBook allows the user to add a book to the library.
-func AddBook(library *models.Library) {
+func AddBook(store *models.BookStore) {
 
 	title := GetBookTitle()
 	author := GetBookAuthor()
 	quantity := GetBookQuantity()
+	libraryID := store.GetLibraryID()
+	library := store.GetLibrary(libraryID)
 	book := models.NewBook(title, author, quantity, 0)
 	msg := library.AddBook(&book)
 	fmt.Println(msg)
 }
 
 // DisplayAvailableBooks prints the list of available books in the library.
-func DisplayAvailableBooks(library *models.Library) {
-	if len(library.Books) == 0 {
-		fmt.Println("\nThe library is empty.")
-		return
-	}
-	printBooksAllDetails(library.Books)
+func DisplayAvailableBooks(store *models.BookStore) {
+
+	printAllLibriesBooks(store)
+
 }
 
 // BorrowBook allows the user to borrow a book from the library.
-func BorrowBook(library *models.Library) {
+func BorrowBook(store *models.BookStore) {
 	title := GetBookTitle()
+	libraryID := store.GetLibraryID()
+	library := store.GetLibrary(libraryID)
 	msg := library.BorrowBook(title)
 	fmt.Println()
 	fmt.Println(msg)
 }
 
 // ReturnBook allows the user to return a borrowed book to the library.
-func ReturnBook(library *models.Library) {
+func ReturnBook(store *models.BookStore) {
 	title := GetBookTitle()
+	libraryID := store.GetLibraryID()
+	library := store.GetLibrary(libraryID)
 	msg := library.ReturnBook(title)
 	fmt.Println()
 	fmt.Println(msg)
 }
 
 // SearchBook allows the user to search for books by title or author.
-func SearchBook(library *models.Library) {
+func SearchBook(store *models.BookStore) {
 	for {
 		DisplaySearchMenu()
 		choice := GetUserChoice()
 		switch choice {
 		case constants.TitleSearchOption:
-			SearchBookByTitle(library)
+			SearchBookByTitle(store)
 			return
 		case constants.AuthorSearchOption:
-			SearchBookByAuthor(library)
+			SearchBookByAuthor(store)
 			return
 		default:
 			fmt.Print("Invalid search option selected, please try again...")
@@ -62,8 +66,11 @@ func SearchBook(library *models.Library) {
 }
 
 // DisplayBorrowedBooks displays the list of books borrowed by the user.
-func DisplayBorrowedBooks(library *models.Library) {
+func DisplayBorrowedBooks(store *models.BookStore) {
+	id := store.GetLibraryID()
+	library := store.GetLibrary(id)
 	books := library.BorrowedBooks()
+
 	fmt.Println()
 	if len(books) == 0 {
 		fmt.Println("No books borrowed")
@@ -74,28 +81,44 @@ func DisplayBorrowedBooks(library *models.Library) {
 }
 
 // SearchBookByTitle allows the user to search for books by title.
-func SearchBookByTitle(library *models.Library) {
+func SearchBookByTitle(store *models.BookStore) {
 	title := GetBookTitle()
-	books := library.SearchBookByTitle(title)
-	fmt.Println()
-	if len(books) == 0 {
-		fmt.Printf("No books available with the title: %s\n", title)
-	} else {
-		fmt.Println("Here is the best match to your search:")
-		printBooksAllDetails(books)
+	for _, library := range store.Libraries {
+		books := library.SearchBookByTitle(title)
+		fmt.Println("library", library.ID)
+		if len(books) == 0 {
+			fmt.Printf("No books available with the title: %s\n", title)
+		} else {
+			fmt.Println("Here is the best match to your search:")
+			printBooksAllDetails(books)
+		}
 	}
+
 }
 
 // SearchBookByAuthor allows the user to search for books by author.
-func SearchBookByAuthor(library *models.Library) {
+func SearchBookByAuthor(store *models.BookStore) {
 	author := GetBookAuthor()
-	books := library.SearchBookByAuthor(author)
-	fmt.Println()
-	if len(books) == 0 {
-		fmt.Printf("No books available of the author: %s\n", author)
-	} else {
-		fmt.Println("Here is the best match to your search:")
-		printBooksAllDetails(books)
+	for _, library := range store.Libraries {
+		books := library.SearchBookByAuthor(author)
+		fmt.Println(" lib", library.ID)
+		if len(books) == 0 {
+			fmt.Printf("No books available of the author: %s\n", author)
+		} else {
+			fmt.Println("Here is the best match to your search:")
+			printBooksAllDetails(books)
+		}
+	}
+}
+
+func printAllLibriesBooks(store *models.BookStore) {
+	for _, lib := range store.Libraries {
+		fmt.Println("Library ID:", lib.ID)
+		if len(lib.Books) == 0 {
+			fmt.Print("No book in the lib ")
+			continue
+		}
+		printBooksAllDetails(lib.Books)
 	}
 }
 
