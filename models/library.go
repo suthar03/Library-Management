@@ -1,9 +1,6 @@
 package models
 
 import (
-	"bufio"
-	"fmt"
-	"os"
 	"strings"
 )
 
@@ -39,33 +36,6 @@ func (store *BookStore) GetLibrary(id string) *Library {
 		}
 	}
 	return nil
-}
-
-func (store *BookStore) GetLibraryID() string {
-	var libraryID string
-	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Print("Enter library id: ")
-	if scanner.Scan() {
-		libraryID = scanner.Text()
-	}
-	if err := store.ValidateLibraryID(libraryID); err != nil {
-		fmt.Println(err.Error(), ", please try again...")
-		libraryID = store.GetLibraryID()
-	}
-	return libraryID
-}
-
-func (store *BookStore) ValidateLibraryID(id string) error {
-	id = strings.TrimSpace(id) // Remove leading and trailing whitespace
-	if id == "" {
-		return fmt.Errorf("library id cannot be empty")
-	}
-	for _, lib := range store.Libraries {
-		if strings.EqualFold(lib.ID, id) {
-			return nil
-		}
-	}
-	return fmt.Errorf("invalid library id")
 }
 
 func (library *Library) AddBook(newBook *Book) string {

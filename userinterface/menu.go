@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"pinelabs/constants"
+	"pinelabs/models"
 	"strconv"
 	"strings"
 )
@@ -102,4 +103,31 @@ func ValidateBookQuantity(quantityInput string) (int, error) {
 		return 0, fmt.Errorf("quantity must be a positive number")
 	}
 	return quantity, nil
+}
+
+func GetLibraryID(store *models.BookStore) string {
+	var libraryID string
+	scanner := bufio.NewScanner(os.Stdin)
+	fmt.Print("Enter library id: ")
+	if scanner.Scan() {
+		libraryID = scanner.Text()
+	}
+	if err := ValidateLibraryID(store, libraryID); err != nil {
+		fmt.Println(err.Error(), ", please try again...")
+		libraryID = GetLibraryID(store)
+	}
+	return libraryID
+}
+
+func ValidateLibraryID(store *models.BookStore, id string) error {
+	id = strings.TrimSpace(id) // Remove leading and trailing whitespace
+	if id == "" {
+		return fmt.Errorf("library id cannot be empty")
+	}
+	for _, lib := range store.Libraries {
+		if strings.EqualFold(lib.ID, id) {
+			return nil
+		}
+	}
+	return fmt.Errorf("invalid library id")
 }

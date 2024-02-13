@@ -13,7 +13,7 @@ func AddBook(store *models.BookStore) {
 	title := GetBookTitle()
 	author := GetBookAuthor()
 	quantity := GetBookQuantity()
-	libraryID := store.GetLibraryID()
+	libraryID := GetLibraryID(store)
 	library := store.GetLibrary(libraryID)
 	book := models.NewBook(title, author, quantity, 0)
 	msg := library.AddBook(&book)
@@ -30,7 +30,7 @@ func DisplayAvailableBooks(store *models.BookStore) {
 // BorrowBook allows the user to borrow a book from the library.
 func BorrowBook(store *models.BookStore) {
 	title := GetBookTitle()
-	libraryID := store.GetLibraryID()
+	libraryID := GetLibraryID(store)
 	library := store.GetLibrary(libraryID)
 	msg := library.BorrowBook(title)
 	fmt.Println()
@@ -40,7 +40,7 @@ func BorrowBook(store *models.BookStore) {
 // ReturnBook allows the user to return a borrowed book to the library.
 func ReturnBook(store *models.BookStore) {
 	title := GetBookTitle()
-	libraryID := store.GetLibraryID()
+	libraryID := GetLibraryID(store)
 	library := store.GetLibrary(libraryID)
 	msg := library.ReturnBook(title)
 	fmt.Println()
@@ -67,7 +67,7 @@ func SearchBook(store *models.BookStore) {
 
 // DisplayBorrowedBooks displays the list of books borrowed by the user.
 func DisplayBorrowedBooks(store *models.BookStore) {
-	id := store.GetLibraryID()
+	id := GetLibraryID(store)
 	library := store.GetLibrary(id)
 	books := library.BorrowedBooks()
 
